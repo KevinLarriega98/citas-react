@@ -1,18 +1,51 @@
 import { useState } from "react"
+import Error from "./Error";
 
-const Formulario = () => {
+const Formulario = ({ pacientes, setPacientes }) => {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [emailPropietario, setEmailPropietario] = useState('');
   const [altaMascota, setAltaMascota] = useState('');
   const [sintomasMascota, setSintomasMascota] = useState('');
 
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if ([nombreMascota, nombrePropietario, emailPropietario, altaMascota, sintomasMascota].includes('')) {
+      setError(true);
+      return;
+    }
+
+    setError(false);
+
+    const objetoPaciente = {
+      nombreMascota,
+      nombrePropietario,
+      emailPropietario,
+      altaMascota,
+      sintomasMascota
+    }
+
+    setPacientes([...pacientes, objetoPaciente]);
+
+    setNombreMascota('');
+    setNombrePropietario('');
+    setEmailPropietario('');
+    setAltaMascota('');
+    setSintomasMascota('');
+  }
+
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
       <h2 className="font-black text-3xl text-center">Seguimiento de pacientes</h2>
       <p className="text-lg mt-5 text-center mb-10">Añade pacientes y <span className="text-indigo-600 font-bold">adminístralos</span></p>
 
-      <form className="bg-white shadow-md rounded-lg py-10 px-5">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg py-10 px-5">
+        {error && <Error />}
         <div className="mb-5">
           <label htmlFor="nombreMascota" className="block text-gray-700 uppercase font-bold">Nombre de la mascota</label>
           <input
