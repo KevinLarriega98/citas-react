@@ -10,6 +10,12 @@ const Formulario = ({ pacientes, setPacientes }) => {
 
   const [error, setError] = useState(false);
 
+  const generarId = () => {
+    const random = Math.random().toString(36).substring(2);
+
+    return random;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -25,7 +31,8 @@ const Formulario = ({ pacientes, setPacientes }) => {
       nombrePropietario,
       emailPropietario,
       altaMascota,
-      sintomasMascota
+      sintomasMascota,
+      id: generarId()
     }
 
     setPacientes([...pacientes, objetoPaciente]);
@@ -45,7 +52,7 @@ const Formulario = ({ pacientes, setPacientes }) => {
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg py-10 px-5">
-        {error && <Error />}
+        {error && <Error><p>Todos los campos son obligatorios</p></Error>}
         <div className="mb-5">
           <label htmlFor="nombreMascota" className="block text-gray-700 uppercase font-bold">Nombre de la mascota</label>
           <input
