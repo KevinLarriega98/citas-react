@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Error from "./Error";
 
-const Formulario = ({ pacientes, setPacientes }) => {
+const Formulario = ({ pacientes, setPacientes, updatePaciente }) => {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [emailPropietario, setEmailPropietario] = useState('');
@@ -9,6 +9,16 @@ const Formulario = ({ pacientes, setPacientes }) => {
   const [sintomasMascota, setSintomasMascota] = useState('');
 
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if(Object.keys(updatePaciente).length > 0) {
+      setNombreMascota(updatePaciente.nombreMascota);
+      setNombrePropietario(updatePaciente.nombrePropietario);
+      setEmailPropietario(updatePaciente.emailPropietario);
+      setAltaMascota(updatePaciente.altaMascota);
+      setSintomasMascota(updatePaciente.sintomasMascota);
+    }
+  })
 
   const generarId = () => {
     const random = Math.random().toString(36).substring(2);
