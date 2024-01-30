@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Error from "./Error";
 
-const Formulario = ({ pacientes, setPacientes, updatePaciente }) => {
+const Formulario = ({ pacientes, setPacientes, updatePaciente, setUpdatePaciente }) => {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [emailPropietario, setEmailPropietario] = useState('');
@@ -11,14 +11,14 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente }) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if(Object.keys(updatePaciente).length > 0) {
+    if (Object.keys(updatePaciente).length > 0) {
       setNombreMascota(updatePaciente.nombreMascota);
       setNombrePropietario(updatePaciente.nombrePropietario);
       setEmailPropietario(updatePaciente.emailPropietario);
       setAltaMascota(updatePaciente.altaMascota);
       setSintomasMascota(updatePaciente.sintomasMascota);
     }
-  })
+  }, [updatePaciente])
 
   const generarId = () => {
     const random = Math.random().toString(36).substring(2);
@@ -41,11 +41,20 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente }) => {
       nombrePropietario,
       emailPropietario,
       altaMascota,
-      sintomasMascota,
-      id: generarId()
+      sintomasMascota
     }
 
-    setPacientes([...pacientes, objetoPaciente]);
+    if (updatePaciente.id) {
+      objetoPaciente.id = updatePaciente.id;
+
+      const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id === updatePaciente.id ? objetoPaciente : pacienteState)
+
+      setPacientes(pacientesActualizados);
+      setUpdatePaciente({});
+    } else {
+      objetoPaciente.id = generarId();
+      setPacientes([...pacientes, objetoPaciente]);
+    }
 
     setNombreMascota('');
     setNombrePropietario('');
@@ -116,7 +125,10 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente }) => {
             onChange={(e) => setSintomasMascota(e.target.value)} />
         </div>
 
-        <input type="submit" className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all" value="Agregar paciente" />
+        <input
+          type="submit"
+          className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all"
+          value={updatePaciente.id ? 'Editar paciente' : 'Agregar paciente'} />
       </form>
     </div>
   )
