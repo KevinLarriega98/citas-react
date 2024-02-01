@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Error from "./Error";
 
-const Formulario = ({ pacientes, setPacientes, updatePaciente, setUpdatePaciente }) => {
+const Formulario = ({ pacientes, setPacientes, actualizarPaciente, setActualizarPaciente }) => {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [emailPropietario, setEmailPropietario] = useState('');
@@ -11,14 +11,14 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente, setUpdatePaciente
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(updatePaciente).length > 0) {
-      setNombreMascota(updatePaciente.nombreMascota);
-      setNombrePropietario(updatePaciente.nombrePropietario);
-      setEmailPropietario(updatePaciente.emailPropietario);
-      setAltaMascota(updatePaciente.altaMascota);
-      setSintomasMascota(updatePaciente.sintomasMascota);
+    if (Object.keys(actualizarPaciente).length > 0) {
+      setNombreMascota(actualizarPaciente.nombreMascota);
+      setNombrePropietario(actualizarPaciente.nombrePropietario);
+      setEmailPropietario(actualizarPaciente.emailPropietario);
+      setAltaMascota(actualizarPaciente.altaMascota);
+      setSintomasMascota(actualizarPaciente.sintomasMascota);
     }
-  }, [updatePaciente])
+  }, [actualizarPaciente])
 
   const generarId = () => {
     const random = Math.random().toString(36).substring(2);
@@ -44,13 +44,13 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente, setUpdatePaciente
       sintomasMascota
     }
 
-    if (updatePaciente.id) {
-      objetoPaciente.id = updatePaciente.id;
+    if (actualizarPaciente.id) {
+      objetoPaciente.id = actualizarPaciente.id;
 
-      const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id === updatePaciente.id ? objetoPaciente : pacienteState)
+      const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id === actualizarPaciente.id ? objetoPaciente : pacienteState)
 
       setPacientes(pacientesActualizados);
-      setUpdatePaciente({});
+      setActualizarPaciente({});
     } else {
       objetoPaciente.id = generarId();
       setPacientes([...pacientes, objetoPaciente]);
@@ -128,7 +128,7 @@ const Formulario = ({ pacientes, setPacientes, updatePaciente, setUpdatePaciente
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all"
-          value={updatePaciente.id ? 'Editar paciente' : 'Agregar paciente'} />
+          value={actualizarPaciente.id ? 'Editar paciente' : 'Agregar paciente'} />
       </form>
     </div>
   )
